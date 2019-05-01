@@ -43,7 +43,7 @@ void Meshio::set_bounding_box(int nx, int ny, int nz)
 	zmin = vertex[0].z;
 	zmax = vertex[0].z;
 
-	for (int i = 1; i < nvert; i++)
+	for (int i = 0; i < nvert; i++)
 	{
 		if (vertex[i].x <= xmin)
 		{
@@ -143,9 +143,9 @@ void Meshio::point_membership()
 				int count = 0;
 				for (int iface = 0; iface < nface; iface++)
 				{
-					int v0_ind = face[i].v[0];
-					int v1_ind = face[i].v[1];
-					int v2_ind = face[i].v[2];
+					int v0_ind = face[iface].v[0];
+					int v1_ind = face[iface].v[1];
+					int v2_ind = face[iface].v[2];
 
 					vertex3D nn = face[iface].n;
 					float D = -(nn.x*vertex[v0_ind].x + nn.y*vertex[v0_ind].y + nn.z*vertex[v0_ind].z);
