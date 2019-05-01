@@ -18,6 +18,9 @@ class tri
 {
 public:
 	int v[3];
+	vertex3D n;
 };
+
+
 
 #endif
