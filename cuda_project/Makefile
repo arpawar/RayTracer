@@ -148,11 +148,11 @@ else ifneq ($(TARGET_ARCH),$(HOST_ARCH))
     endif
 endif
 HOST_COMPILER ?= g++
-NVCC          := $(CUDA_PATH)/bin/nvcc -ccbin $(HOST_COMPILER) -std=c++11
+NVCC          := $(CUDA_PATH)/bin/nvcc -ccbin $(HOST_COMPILER) 
 
 # internal flags
-NVCCFLAGS   := -m${TARGET_SIZE}
-CCFLAGS     :=
+NVCCFLAGS   := -Xcompiler -fopenmp -m${TARGET_SIZE}  -std=c++11 
+CCFLAGS     := 
 LDFLAGS     :=
 
 # build flags
@@ -221,7 +221,7 @@ ALL_CCFLAGS += $(addprefix -Xcompiler ,$(EXTRA_CCFLAGS))
 
 SAMPLE_ENABLED := 1
 
-ALL_LDFLAGS :=
+ALL_LDFLAGS := -lgomp
 ALL_LDFLAGS += $(ALL_CCFLAGS)
 ALL_LDFLAGS += $(addprefix -Xlinker ,$(LDFLAGS))
 ALL_LDFLAGS += $(addprefix -Xlinker ,$(EXTRA_LDFLAGS))

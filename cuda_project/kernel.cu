@@ -143,7 +143,8 @@ int main()
 	printf("maximum x, y, z = %f, %f, %f\n", Mesh_host.x_max, Mesh_host.y_max, Mesh_host.z_max);
 
     begin = clock();
-    Mesh_host.calculate_normal();    
+    Mesh_host.calculate_normal();  
+    printf("Tracing\n");
     Mesh_host.point_membership();
     end = clock();
     elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
@@ -188,8 +189,6 @@ int main()
 
 
     begin = clock();
-    // std::cout << typeid(*Mesh_dev).name() << '\n';
-    // Calculate normals of the surface mesh
     printf("Computing normal vector for each element on GPU\n");
     calculate_normal<<<(nface + thread_per_block - 1)/thread_per_block, thread_per_block>>>(vertex_dev, face_dev, nface);
     cudaDeviceSynchronize();
@@ -220,23 +219,6 @@ int main()
     cudaFree(vertex_dev);
     cudaFree(origin_dev);
     cudaFree(face_dev);
-    // printf("Setting bounding box on GPU\n");
-    // cudaDeviceSynchronize();
-	// Mesh_dev->set_bounding_box(ndivx, ndivy, ndivz);
-	
-	// printf("minimum x, y, z = %f, %f, %f\n", Mesh_dev->x_min, Mesh_dev->y_min, Mesh_dev->z_min);
-	// printf("maximum x, y, z = %f, %f, %f\n", Mesh_dev->x_max, Mesh_dev->y_max, Mesh_dev->z_max);
-
-
-    // cudaDeviceSynchronize();
-	// Mesh_dev.calculate_normal();
-
-    // //Ray-tracing
-    // printf("Ray tracing on GPU\n");
-    // cudaDeviceSynchronize();
-    // Mesh_dev.point_membership();
-    
-	// getchar();
     
     return 0;
 }
