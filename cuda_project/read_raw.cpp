@@ -104,9 +104,9 @@ void Meshio::calculate_grid(vector<vertex3D> &origin_out)
 			for (int i = 0; i < ndivx; i++)
 			{
 				int e = k * ndivy * ndivx + j * ndivx + i;
-				origin_out[e].x = x_min + ((x_max - x_min) / ((ndivx - 1) * i));
-				origin_out[e].y = y_min + ((y_max - y_min) / ((ndivy - 1) * j));
-				origin_out[e].z = z_min + ((z_max - z_min) / ((ndivz - 1) * k));
+				origin_out[e].x = x_min + (x_max - x_min) / (ndivx - 1) * i;
+				origin_out[e].y = y_min + (y_max - y_min) / (ndivy - 1) * j;
+				origin_out[e].z = z_min + (z_max - z_min) / (ndivz - 1) * k;
 			}
 		}
 	}
@@ -161,9 +161,9 @@ void Meshio::point_membership()
 			for (int i = 0; i < ndivx; i++)
 			{
 				vertex3D origin;
-				origin.x = x_min + ((x_max - x_min) / ((ndivx - 1) * i));
-				origin.y = y_min + ((y_max - y_min) / ((ndivy - 1) * j));
-				origin.z = z_min + ((z_max - z_min) / ((ndivz - 1) * k));
+				origin.x = x_min + (x_max - x_min) / (ndivx - 1) * i;
+				origin.y = y_min + (y_max - y_min) / (ndivy - 1) * j;
+				origin.z = z_min + (z_max - z_min) / (ndivz - 1) * k;
 
 				int count = 0;
 				for (int iface = 0; iface < nface; iface++)
@@ -243,4 +243,29 @@ void Meshio::point_membership()
 			}
 		}
 	}
+}
+
+void Meshio::display_result(int* bbox_flag_host)
+{
+	char filename[] = "../io/bunny_tri_result.txt";
+	FILE *fp = fopen(filename, "w");
+	float x, y, z;
+	int ngrid;
+	ngrid = 0;
+	for (int k = 0; k < ndivz; k++)
+	{
+		for (int j = 0; j < ndivy; j++)
+		{
+			for (int i = 0; i < ndivx; i++)
+			{
+				
+				x = x_min + i*((x_max - x_min) / (ndivx - 1));
+				y = y_min + j*((y_max - y_min) / (ndivy - 1));
+				z = z_min + k*((z_max - z_min) / (ndivz - 1));
+				fprintf(fp, "%d %f %f %f %d\n", ngrid+1, x, y, z, bbox_flag_host[ngrid]);
+				ngrid = ngrid + 1;
+			}
+		}		
+	}
+	
 }

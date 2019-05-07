@@ -126,9 +126,9 @@ int main()
     vector<vertex3D> vertex_host, origin_host;
     vector<tri> face_host;
 	int ndivx, ndivy, ndivz;
-	ndivx = 20;
-	ndivy = 20;
-    ndivz = 20;
+	ndivx = 51;
+	ndivy = 51;
+    ndivz = 51;
     
     clock_t begin, end;
     double elapsed_secs;
@@ -208,6 +208,8 @@ int main()
 
     int bbox_flag_host[ngrid]; /// Use this variable to output the result
     cudaMemcpy((void *)bbox_flag_host, (void *)bbox_flag_dev, ngrid * sizeof(int), cudaMemcpyDeviceToHost);
+
+    Mesh_host.display_result(bbox_flag_host);
 
     // for(int ii = 0; ii<ngrid;ii++)
     // {

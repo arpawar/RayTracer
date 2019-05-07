@@ -25,7 +25,7 @@ public:
 	void calculate_grid(vector<vertex3D> &origin_out);
 	void calculate_normal();
 	void point_membership();
-	
+	void display_result(int* bbox_flag_host);
 };
 
 
