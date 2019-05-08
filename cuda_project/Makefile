@@ -151,7 +151,7 @@ HOST_COMPILER ?= g++
 NVCC          := $(CUDA_PATH)/bin/nvcc -ccbin $(HOST_COMPILER) 
 
 # internal flags
-NVCCFLAGS   := -Xcompiler -fopenmp -m${TARGET_SIZE}  -std=c++11 
+NVCCFLAGS   := -Xcompiler -fopenmp -m${TARGET_SIZE}  -std=c++11  --disable-warnings
 CCFLAGS     := 
 LDFLAGS     :=
 
@@ -260,7 +260,6 @@ endif
 # Target rules
 all: build
 
-# build: template
 build: kernel
 
 check.deps:
@@ -270,35 +269,10 @@ else
 	@echo "Sample is ready - all dependencies have been met"
 endif
 
-# template.o:template.cu
-# 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-
-# template_cpu.o:template_cpu.cpp
-# 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-
-# template: template.o template_cpu.o
-# 	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
-#	$(EXEC) mkdir -p ../../bin/$(TARGET_ARCH)/$(TARGET_OS)/$(BUILD_TYPE)
-#	$(EXEC) cp $@ ../../bin/$(TARGET_ARCH)/$(TARGET_OS)/$(BUILD_TYPE)
-
-# run: build
-# 	$(EXEC) ./template
-
-# clean:
-# 	rm -f template template.o template_cpu.o
-# 	rm -rf ../../bin/$(TARGET_ARCH)/$(TARGET_OS)/$(BUILD_TYPE)/template
-
-# clobber: clean
-
 kernel.o:kernel.cu
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 read_raw.o: read_raw.cpp
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-# kernel.o: cuda_cpp_class.cu
-# 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-
-# kernel.o: vectorAdd.cu
-# 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
 kernel: kernel.o read_raw.o
 	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
@@ -308,6 +282,5 @@ run: build
 
 clean:
 	rm -f kernel kernel.o read_raw.o
-	# rm -rf ../../bin/$(TARGET_ARCH)/$(TARGET_OS)/$(BUILD_TYPE)/template
 
 clobber: clean
