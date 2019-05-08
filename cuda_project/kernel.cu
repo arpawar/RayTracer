@@ -36,13 +36,13 @@ __global__ void calculate_normal(vertex3D* vertex, tri* face, int nface)
 		e2.z = vertex[v2_ind].z - vertex[v0_ind].z;
 
 		nn.x = e1.y*e2.z - e1.z*e2.y;
-		nn.y = e1.x*e2.z - e1.z*e2.x;
+		nn.y = e1.z*e2.x - e1.x*e2.z;
 		nn.z = e1.x*e2.y - e1.y*e2.x;
 
 		float n_norm = sqrt(pow(nn.x, 2) + pow(nn.y, 2) + pow(nn.z, 2));
-		face[i].n.x = (e1.y*e2.z - e1.z*e2.y)/n_norm;
-		face[i].n.y = (e1.x*e2.z - e1.z*e2.x)/n_norm;
-		face[i].n.z = (e1.x*e2.y - e1.y*e2.x)/n_norm;
+		face[i].n.x = nn.x/n_norm;
+		face[i].n.y = nn.y/n_norm;
+		face[i].n.z = nn.z/n_norm;
     }
     // printf("EleIdx: %d, BlockIdx: %d, ThreadIdx: %d, %f %f %f, Done!\n", i ,blockIdx.x, threadIdx.x, face[i].n.x, face[i].n.y,face[i].n.z);
 
@@ -87,11 +87,11 @@ __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3
 			c0.x = p_vec.x - vertex[v0_ind].x;  c0.y = p_vec.y - vertex[v0_ind].y;  c0.z = p_vec.z - vertex[v0_ind].z;
 			c1.x = p_vec.x - vertex[v1_ind].x;  c1.y = p_vec.y - vertex[v1_ind].y;  c1.z = p_vec.z - vertex[v1_ind].z;
 			c2.x = p_vec.x - vertex[v2_ind].x;  c2.y = p_vec.y - vertex[v2_ind].y;  c2.z = p_vec.z - vertex[v2_ind].z;
-			vertex3D e0c0, e1c1, e2c2;
-			e0c0.x = e0.y*c0.z - e0.z*c0.y; e0c0.y = e0.x*c0.z - e0.z*c0.x; e0c0.z = e0.x*c0.y - e0.y*c0.x;
-			e1c1.x = e1.y*c1.z - e1.z*c1.y; e1c1.y = e1.x*c1.z - e1.z*c1.x; e1c1.z = e1.x*c1.y - e1.y*c1.x;
-			e2c2.x = e2.y*c2.z - e2.z*c2.y; e2c2.y = e2.x*c2.z - e2.z*c2.x; e2c2.z = e2.x*c2.y - e2.y*c2.x;
-			
+            vertex3D e0c0, e1c1, e2c2;
+            e0c0.x = e0.y*c0.z - e0.z*c0.y; e0c0.y = e0.z*c0.x - e0.x*c0.z; e0c0.z = e0.x*c0.y - e0.y*c0.x;
+            e1c1.x = e1.y*c1.z - e1.z*c1.y; e1c1.y = e1.z*c1.x - e1.x*c1.z; e1c1.z = e1.x*c1.y - e1.y*c1.x;
+            e2c2.x = e2.y*c2.z - e2.z*c2.y; e2c2.y = e2.z*c2.x - e2.x*c2.z; e2c2.z = e2.x*c2.y - e2.y*c2.x;
+
 			float case1, case2, case3;
 			case1 = nn.x*e0c0.x + nn.y*e0c0.y + nn.z*e0c0.z;
 			case2 = nn.x*e1c1.x + nn.y*e1c1.y + nn.z*e1c1.z;
@@ -126,9 +126,9 @@ int main()
     vector<vertex3D> vertex_host, origin_host;
     vector<tri> face_host;
 	int ndivx, ndivy, ndivz;
-	ndivx = 51;
-	ndivy = 51;
-    ndivz = 51;
+	ndivx = 101;
+	ndivy = 101;
+    ndivz = 101;
     
     clock_t begin, end;
     double elapsed_secs;
@@ -142,13 +142,13 @@ int main()
     printf("minimum x, y, z = %f, %f, %f\n", Mesh_host.x_min, Mesh_host.y_min, Mesh_host.z_min);
 	printf("maximum x, y, z = %f, %f, %f\n", Mesh_host.x_max, Mesh_host.y_max, Mesh_host.z_max);
 
-    begin = clock();
-    Mesh_host.calculate_normal();  
-    printf("Tracing\n");
-    Mesh_host.point_membership();
-    end = clock();
-    elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-    printf("CPU computing: %f\n", elapsed_secs);
+    // begin = clock();
+    // Mesh_host.calculate_normal();  
+    // printf("Tracing\n");
+    // Mesh_host.point_membership();
+    // end = clock();
+    // elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+    // printf("CPU computing: %f\n", elapsed_secs);
 
     printf("----------Starting GPU Code----------\n");
 

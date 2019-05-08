@@ -134,14 +134,14 @@ void Meshio::calculate_normal()
 		e2.y = vertex[v2_ind].y - vertex[v0_ind].y;
 		e2.z = vertex[v2_ind].z - vertex[v0_ind].z;
 
-		nn.x = e1.y * e2.z - e1.z * e2.y;
-		nn.y = e1.x * e2.z - e1.z * e2.x;
-		nn.z = e1.x * e2.y - e1.y * e2.x;
+		nn.x = e1.y*e2.z - e1.z*e2.y;
+		nn.y = e1.z*e2.x - e1.x*e2.z;
+		nn.z = e1.x*e2.y - e1.y*e2.x;
 
 		float n_norm = sqrt(pow(nn.x, 2) + pow(nn.y, 2) + pow(nn.z, 2));
-		face[i].n.x = (e1.y * e2.z - e1.z * e2.y) / n_norm;
-		face[i].n.y = (e1.x * e2.z - e1.z * e2.x) / n_norm;
-		face[i].n.z = (e1.x * e2.y - e1.y * e2.x) / n_norm;
+		face[i].n.x = nn.x/n_norm;
+		face[i].n.y = nn.y/n_norm;
+		face[i].n.z = nn.z/n_norm;
 	}
 }
 
@@ -205,15 +205,9 @@ void Meshio::point_membership()
 					c2.z = p_vec.z - vertex[v2_ind].z;
 
 					vertex3D e0c0, e1c1, e2c2;
-					e0c0.x = e0.y * c0.z - e0.z * c0.y;
-					e0c0.y = e0.x * c0.z - e0.z * c0.x;
-					e0c0.z = e0.x * c0.y - e0.y * c0.x;
-					e1c1.x = e1.y * c1.z - e1.z * c1.y;
-					e1c1.y = e1.x * c1.z - e1.z * c1.x;
-					e1c1.z = e1.x * c1.y - e1.y * c1.x;
-					e2c2.x = e2.y * c2.z - e2.z * c2.y;
-					e2c2.y = e2.x * c2.z - e2.z * c2.x;
-					e2c2.z = e2.x * c2.y - e2.y * c2.x;
+					e0c0.x = e0.y*c0.z - e0.z*c0.y; e0c0.y = e0.z*c0.x - e0.x*c0.z; e0c0.z = e0.x*c0.y - e0.y*c0.x;
+					e1c1.x = e1.y*c1.z - e1.z*c1.y; e1c1.y = e1.z*c1.x - e1.x*c1.z; e1c1.z = e1.x*c1.y - e1.y*c1.x;
+					e2c2.x = e2.y*c2.z - e2.z*c2.y; e2c2.y = e2.z*c2.x - e2.x*c2.z; e2c2.z = e2.x*c2.y - e2.y*c2.x;
 
 					float case1, case2, case3;
 					case1 = nn.x * e0c0.x + nn.y * e0c0.y + nn.z * e0c0.z;
@@ -252,6 +246,7 @@ void Meshio::display_result(int* bbox_flag_host)
 	float x, y, z;
 	int ngrid;
 	ngrid = 0;
+	fprintf(fp, "%d\n", ndivx*ndivy*ndivz);
 	for (int k = 0; k < ndivz; k++)
 	{
 		for (int j = 0; j < ndivy; j++)
