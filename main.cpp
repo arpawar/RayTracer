@@ -11,9 +11,9 @@ void main()
 	char filename[] = "bunny_tri.raw";
 	int nvert, nface;
 	int ndivx, ndivy, ndivz;
-	ndivx = 100;
-	ndivy = 100;
-	ndivz = 100;
+	ndivx = 21;
+	ndivy = 21;
+	ndivz = 21;
 
 	Meshio Mesh;
 
@@ -25,8 +25,10 @@ void main()
 
 	// Calculate normals of the surface mesh
 	Mesh.calculate_normal();
-
+	printf("calculate normal\n");
 	//Ray-tracing
 	Mesh.point_membership();
-	getchar();
+	printf("point membership done\n");
+	Mesh.display_result();
+	printf("written result\n");
 }

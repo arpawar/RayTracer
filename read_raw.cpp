@@ -92,8 +92,9 @@ void Meshio::set_bounding_box(int nx, int ny, int nz)
 
 void Meshio::calculate_normal()
 {
-
-	for (int i = 1; i < nface; i++)
+	//char filename[] = "Sphere_100_tri_normal.txt";
+	//FILE *fp = fopen(filename, "w");
+	for (int i = 0; i < nface; i++)
 	{
 		int v0_ind = face[i].v[0];
 		int v1_ind = face[i].v[1];
@@ -111,18 +112,21 @@ void Meshio::calculate_normal()
 		e2.z = vertex[v2_ind].z - vertex[v0_ind].z;
 
 		nn.x = e1.y*e2.z - e1.z*e2.y;
-		nn.y = e1.x*e2.z - e1.z*e2.x;
+		nn.y = e1.z*e2.x - e1.x*e2.z;
 		nn.z = e1.x*e2.y - e1.y*e2.x;
 
 		float n_norm = sqrt(pow(nn.x, 2) + pow(nn.y, 2) + pow(nn.z, 2));
-		face[i].n.x = (e1.y*e2.z - e1.z*e2.y)/n_norm;
-		face[i].n.y = (e1.x*e2.z - e1.z*e2.x)/n_norm;
-		face[i].n.z = (e1.x*e2.y - e1.y*e2.x)/n_norm;
+		face[i].n.x = nn.x/n_norm;
+		face[i].n.y = nn.y/n_norm;
+		face[i].n.z = nn.z/n_norm;
+		//fprintf(fp, "%d %f %f %f\n", i + 1, face[i].n.x, face[i].n.y, face[i].n.z);
 	}
 }
 
 void Meshio::point_membership()
 {
+	//char filename[] = "Sphere_100_tri_o.txt";
+	//FILE *fp = fopen(filename, "w");
 	int ngrid = 0;
 	int f1;
 	for (int k = 0; k < ndivz; k++)
@@ -132,15 +136,17 @@ void Meshio::point_membership()
 			for (int i = 0; i < ndivx; i++)
 			{
 				vertex3D origin, ray;
-				origin.x = x_min + ((x_max - x_min) / ((ndivx - 1)*i));
-				origin.y = y_min + ((y_max - y_min) / ((ndivy - 1)*j));
-				origin.z = z_min + ((z_max - z_min) / ((ndivz - 1)*k));
+				origin.x = x_min + i*((x_max - x_min) / (ndivx - 1));
+				origin.y = y_min + j*((y_max - y_min) / (ndivy - 1));
+				origin.z = z_min + k*((z_max - z_min) / (ndivz - 1));
+				//fprintf(fp,"%d, %f, %f, %f\n", ngrid+1, origin.x, origin.y, origin.z);
 
 				ray.x = 1;
 				ray.y = 0;
 				ray.z = 0;
 
 				int count = 0;
+
 				for (int iface = 0; iface < nface; iface++)
 				{
 					int v0_ind = face[iface].v[0];
@@ -148,6 +154,7 @@ void Meshio::point_membership()
 					int v2_ind = face[iface].v[2];
 
 					vertex3D nn = face[iface].n;
+
 					float D = -(nn.x*vertex[v0_ind].x + nn.y*vertex[v0_ind].y + nn.z*vertex[v0_ind].z);
 					float t1 = -(nn.x*origin.x + nn.y*origin.y + nn.z*origin.z + D);
 					float t2 = (nn.x*ray.x + nn.y*ray.y + nn.z*ray.z);
@@ -168,9 +175,9 @@ void Meshio::point_membership()
 					c2.x = p_vec.x - vertex[v2_ind].x;  c2.y = p_vec.y - vertex[v2_ind].y;  c2.z = p_vec.z - vertex[v2_ind].z;
 
 					vertex3D e0c0, e1c1, e2c2;
-					e0c0.x = e0.y*c0.z - e0.z*c0.y; e0c0.y = e0.x*c0.z - e0.z*c0.x; e0c0.z = e0.x*c0.y - e0.y*c0.x;
-					e1c1.x = e1.y*c1.z - e1.z*c1.y; e1c1.y = e1.x*c1.z - e1.z*c1.x; e1c1.z = e1.x*c1.y - e1.y*c1.x;
-					e2c2.x = e2.y*c2.z - e2.z*c2.y; e2c2.y = e2.x*c2.z - e2.z*c2.x; e2c2.z = e2.x*c2.y - e2.y*c2.x;
+					e0c0.x = e0.y*c0.z - e0.z*c0.y; e0c0.y = e0.z*c0.x - e0.x*c0.z; e0c0.z = e0.x*c0.y - e0.y*c0.x;
+					e1c1.x = e1.y*c1.z - e1.z*c1.y; e1c1.y = e1.z*c1.x - e1.x*c1.z; e1c1.z = e1.x*c1.y - e1.y*c1.x;
+					e2c2.x = e2.y*c2.z - e2.z*c2.y; e2c2.y = e2.z*c2.x - e2.x*c2.z; e2c2.z = e2.x*c2.y - e2.y*c2.x;
 					
 					float case1, case2, case3;
 					case1 = nn.x*e0c0.x + nn.y*e0c0.y + nn.z*e0c0.z;
@@ -193,8 +200,33 @@ void Meshio::point_membership()
 					f1 = 1;
 					bbox_flag.push_back(f1);
 				}
+
+				ngrid = ngrid++;
 			}
 		}
 	}
+}
 
+void Meshio::display_result()
+{
+	char filename[] = "bunny_tri_result.txt";
+	FILE *fp = fopen(filename, "w");
+	float x, y, z;
+	int ngrid;
+	ngrid = 0;
+	for (int k = 0; k < ndivz; k++)
+	{
+		for (int j = 0; j < ndivy; j++)
+		{
+			for (int i = 0; i < ndivx; i++)
+			{
+				
+				x = x_min + i*((x_max - x_min) / (ndivx - 1));
+				y = y_min + j*((y_max - y_min) / (ndivy - 1));
+				z = z_min + k*((z_max - z_min) / (ndivz - 1));
+				fprintf(fp, "%d %f %f %f %d\n", ngrid+1, x, y, z, bbox_flag[ngrid]);
+				ngrid = ngrid + 1;
+			}
+		}		
+	}
 }

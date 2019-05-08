@@ -21,6 +21,7 @@ public:
 	void set_bounding_box(int nx, int ny, int nz);
 	void calculate_normal();
 	void point_membership();
+	void display_result();
 };
 
 #endif
