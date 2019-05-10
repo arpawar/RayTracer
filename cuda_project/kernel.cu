@@ -8,17 +8,13 @@
 
 #include "cxxopts.hpp"
 #include "basic_datastructure.h"
-#include "read_raw.h"
+#include "RayTracer.h"
 
 using namespace std;
-// #define ndivx 100
-// #define ndivy 100
-// #define ndivz 100
 
 __global__ void calculate_normal(vertex3D *vertex, tri *face, int nface)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
-    // for (int i = 0; i < nface; i++)
     if (i < nface)
     {
         int v0_ind = face[i].v[0];
@@ -45,7 +41,6 @@ __global__ void calculate_normal(vertex3D *vertex, tri *face, int nface)
         face[i].n.y = nn.y / n_norm;
         face[i].n.z = nn.z / n_norm;
     }
-    // printf("EleIdx: %d, BlockIdx: %d, ThreadIdx: %d, %f %f %f, Done!\n", i ,blockIdx.x, threadIdx.x, face[i].n.x, face[i].n.y,face[i].n.z);
 }
 
 __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3D *vertex, tri *face, int *bbox_flag)
@@ -170,7 +165,7 @@ int main(int argc, char *argv[])
             ("cpu", "Run Raytracing in CPU", cxxopts::value<bool>()->default_value("false"))
             ("gpu", "Run Raytracing in GPU", cxxopts::value<bool>()->default_value("true"))
             ("i,input", "Input file", cxxopts::value<string>()->default_value("../io/bunny_tri.raw"))
-            ("o,output", "Output file", cxxopts::value<string>()->default_value("../io/result.out"))
+            ("o,output", "Output file", cxxopts::value<string>()->default_value("../io/result.vtk"))
             ("h,help", "Print help")
 #ifdef CXXOPTS_USE_UNICODE
                 ("unicode", u8"A help option with non-ascii: à. Here the size of the"
@@ -201,7 +196,7 @@ int main(int argc, char *argv[])
             memcpy(filename, input_str.c_str(), input_str.size() + 1);
         }
 
-        if (result.count("o"))
+        //if (result.count("o"))
         {
             // Set output file name
             string output_str = result["o"].as<string>();
@@ -301,7 +296,7 @@ int main(int argc, char *argv[])
         int bbox_flag_host[ngrid]; /// Use this variable to output the result
         cudaMemcpy((void *)bbox_flag_host, (void *)bbox_flag_dev, ngrid * sizeof(int), cudaMemcpyDeviceToHost);
     
-        Mesh_host.display_result(bbox_flag_host);
+        Mesh_host.display_result(filename_out, bbox_flag_host);
     
         // for(int ii = 0; ii<ngrid;ii++)
         // {

@@ -271,16 +271,16 @@ endif
 
 kernel.o:kernel.cu
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
-read_raw.o: read_raw.cpp
+RayTracer.o: RayTracer.cpp
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-kernel: kernel.o read_raw.o
+kernel: kernel.o RayTracer.o
 	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
 
 run: build
 	$(EXEC) ./kernel
 
 clean:
-	rm -f kernel kernel.o read_raw.o
+	rm -f kernel kernel.o RayTracer.o
 
 clobber: clean

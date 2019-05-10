@@ -1,5 +1,5 @@
-#ifndef READ_RAW_H
-#define READ_RAW_H
+#ifndef RAYTRACER_H
+#define RAYTRACER_H
 
 #include <vector>
 #include <array>
@@ -25,7 +25,7 @@ public:
 	void calculate_grid(vector<vertex3D> &origin_out);
 	void calculate_normal();
 	void point_membership();
-	void display_result(int* bbox_flag_host);
+	void display_result(char* filename_out,int* bbox_flag_host);
 };
 
 

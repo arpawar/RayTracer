@@ -1,4 +1,4 @@
-#include "read_raw.h"
+#include "RayTracer.h"
 #include "basic_datastructure.h"
 #pragma warning(disable : 4996)
 
@@ -239,14 +239,22 @@ void Meshio::point_membership()
 	}
 }
 
-void Meshio::display_result(int* bbox_flag_host)
+void Meshio::display_result(char* filename_out, int* bbox_flag_host)
 {
-	char filename[] = "../io/bunny_tri_result.txt";
-	FILE *fp = fopen(filename, "w");
+	// char filename[] = "../io/bunny_tri_result.txt";
+	// cout<< filename_out << endl;
+
+	FILE *fp = fopen(filename_out, "w");
+	fprintf(fp, "# vtk DataFile Version 3.0\n");
+	fprintf(fp, "VTK from C\n");
+	fprintf(fp, "ASCII\n");
+	fprintf(fp, "DATASET STRUCTURED_GRID\n");
+	fprintf(fp, "DIMENSIONS %d %d %d\n", ndivx, ndivy, ndivz);
+	int nelem = ndivx*ndivy*ndivz;
+	fprintf(fp, "POINTS %d float\n", nelem);
 	float x, y, z;
 	int ngrid;
 	ngrid = 0;
-	fprintf(fp, "%d\n", ndivx*ndivy*ndivz);
 	for (int k = 0; k < ndivz; k++)
 	{
 		for (int j = 0; j < ndivy; j++)
@@ -257,10 +265,48 @@ void Meshio::display_result(int* bbox_flag_host)
 				x = x_min + i*((x_max - x_min) / (ndivx - 1));
 				y = y_min + j*((y_max - y_min) / (ndivy - 1));
 				z = z_min + k*((z_max - z_min) / (ndivz - 1));
-				fprintf(fp, "%d %f %f %f %d\n", ngrid+1, x, y, z, bbox_flag_host[ngrid]);
+				fprintf(fp, "%f %f %f\n", x, y, z);
 				ngrid = ngrid + 1;
 			}
 		}		
 	}
+	fprintf(fp, "POINT_DATA %d\n", nelem);
+	fprintf(fp, "SCALARS title float\n");
+	fprintf(fp, "LOOKUP_TABLE default\n");
+	ngrid = 0;
+	//fprintf(fp, "0\n0.2\n0\n0.1\n0.184843\n0\n0\n0.25\n0\n");
+	for (int k = 0; k < ndivz; k++)
+	{
+		for (int j = 0; j < ndivy; j++)
+		{
+			for (int i = 0; i < ndivx; i++)
+			{
+				fprintf(fp, "%d\n", bbox_flag_host[ngrid]);
+				ngrid = ngrid + 1;
+			}
+		}
+	}
+
+	// char filename[] = "../io/bunny_tri_result.txt";
+	// FILE *fp = fopen(filename, "w");
+	// float x, y, z;
+	// int ngrid;
+	// ngrid = 0;
+	// fprintf(fp, "%d\n", ndivx*ndivy*ndivz);
+	// for (int k = 0; k < ndivz; k++)
+	// {
+	// 	for (int j = 0; j < ndivy; j++)
+	// 	{
+	// 		for (int i = 0; i < ndivx; i++)
+	// 		{
+				
+	// 			x = x_min + i*((x_max - x_min) / (ndivx - 1));
+	// 			y = y_min + j*((y_max - y_min) / (ndivy - 1));
+	// 			z = z_min + k*((z_max - z_min) / (ndivz - 1));
+	// 			fprintf(fp, "%d %f %f %f %d\n", ngrid+1, x, y, z, bbox_flag_host[ngrid]);
+	// 			ngrid = ngrid + 1;
+	// 		}
+	// 	}		
+	// }
 	
 }
