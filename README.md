@@ -13,7 +13,7 @@ For the algorithm used for testing the location of grid point, please refer to [
     * *.vtk (Ray tracing result in .vtk format, the file can be visualized using [Paraview 5.6.0](https://www.paraview.org/))
 * **To compile the code** 
 
-    In ./src folder, run ` >> make`
+    In `./src` folder, run ` >> make`
 * **To check help information:**
 
    ` >> ./kernel -h` 
