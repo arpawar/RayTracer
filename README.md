@@ -11,7 +11,7 @@ The project objective is to embed a geometry in 3D structured grid and perform t
     * *.vtk (Ray tracing result in .vtk format, the file can be visualized using *[Paraview 5.6.0](https://www.paraview.org/)*)
 * **To compile the code** 
 
-    ` >> make`
+    In ./src folder, run ` >> make`
 * **To check help information:**
 
    ` >> ./kernel -h` 
