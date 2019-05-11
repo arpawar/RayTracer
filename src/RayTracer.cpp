@@ -33,9 +33,11 @@ void Meshio::read_raw_file(const char *fn, vector<vertex3D> &vertex_out, vector<
 	}
 	vertex_out = vertex;
 	face_out = face;
+
+	fclose(fp);
 }
 
-void Meshio::set_bounding_box(int nx, int ny, int nz)
+void Meshio::set_bounding_box(int nx, int ny, int nz, float pm)
 {
 	float xmin, xmax, ymin, ymax, zmin, zmax;
 	xmin = vertex[0].x;
@@ -78,12 +80,19 @@ void Meshio::set_bounding_box(int nx, int ny, int nz)
 		}
 	}
 
-	x_min = floor(xmin - 10);
-	y_min = floor(ymin - 10);
-	z_min = floor(zmin - 10);
-	x_max = floor(xmax + 10);
-	y_max = floor(ymax + 10);
-	z_max = floor(zmax + 10);
+	// x_min = floor(xmin - 10);
+	// y_min = floor(ymin - 10);
+	// z_min = floor(zmin - 10);
+	// x_max = floor(xmax + 10);
+	// y_max = floor(ymax + 10);
+	// z_max = floor(zmax + 10);
+
+	x_min = floor(xmin - pm*(xmax-xmin));
+	y_min = floor(ymin - pm*(ymax-ymin));
+	z_min = floor(zmin - pm*(zmax-zmin));
+	x_max = floor(xmax + pm*(xmax-xmin));
+	y_max = floor(ymax + pm*(ymax-ymin));
+	z_max = floor(zmax + pm*(zmax-zmin));
 
 	ndivx = nx;
 	ndivy = ny;
@@ -230,10 +239,6 @@ void Meshio::point_membership()
 					f1 = 1;
 					bbox_flag[e] = (f1);
 				}
-				//  if (bbox_flag[i + j*ndivx+k*ndivx*ndivy] == 1)
-				//  {
-				//     printf("EleIdx: %d, %d, Done!\n", i + j*ndivx+k*ndivx*ndivy, bbox_flag[i + j*ndivx+k*ndivx*ndivy]);
-				//  }
 			}
 		}
 	}
@@ -241,8 +246,6 @@ void Meshio::point_membership()
 
 void Meshio::display_result(char* filename_out, int* bbox_flag_host)
 {
-	// char filename[] = "../io/bunny_tri_result.txt";
-	// cout<< filename_out << endl;
 
 	FILE *fp = fopen(filename_out, "w");
 	fprintf(fp, "# vtk DataFile Version 3.0\n");
@@ -274,7 +277,6 @@ void Meshio::display_result(char* filename_out, int* bbox_flag_host)
 	fprintf(fp, "SCALARS title float\n");
 	fprintf(fp, "LOOKUP_TABLE default\n");
 	ngrid = 0;
-	//fprintf(fp, "0\n0.2\n0\n0.1\n0.184843\n0\n0\n0.25\n0\n");
 	for (int k = 0; k < ndivz; k++)
 	{
 		for (int j = 0; j < ndivy; j++)
@@ -285,28 +287,7 @@ void Meshio::display_result(char* filename_out, int* bbox_flag_host)
 				ngrid = ngrid + 1;
 			}
 		}
-	}
+	}	
 
-	// char filename[] = "../io/bunny_tri_result.txt";
-	// FILE *fp = fopen(filename, "w");
-	// float x, y, z;
-	// int ngrid;
-	// ngrid = 0;
-	// fprintf(fp, "%d\n", ndivx*ndivy*ndivz);
-	// for (int k = 0; k < ndivz; k++)
-	// {
-	// 	for (int j = 0; j < ndivy; j++)
-	// 	{
-	// 		for (int i = 0; i < ndivx; i++)
-	// 		{
-				
-	// 			x = x_min + i*((x_max - x_min) / (ndivx - 1));
-	// 			y = y_min + j*((y_max - y_min) / (ndivy - 1));
-	// 			z = z_min + k*((z_max - z_min) / (ndivz - 1));
-	// 			fprintf(fp, "%d %f %f %f %d\n", ngrid+1, x, y, z, bbox_flag_host[ngrid]);
-	// 			ngrid = ngrid + 1;
-	// 		}
-	// 	}		
-	// }
-	
+	fclose(fp);
 }

@@ -50,7 +50,7 @@ __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3
     int f1;
 
     int i = blockDim.x * blockIdx.x + threadIdx.x;
-    // for (int i = 0; i < nface; i++)
+
     if (i < ngrid)
     {
         vertex3D origin, ray;
@@ -125,21 +125,16 @@ __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3
             f1 = 1;
             bbox_flag[i] = (f1);
         }
-        if (bbox_flag[i] == 1)
-        {
-            // printf("EleIdx: %d, BlockIdx: %d, ThreadIdx: %d, %d, Done!\n", i ,blockIdx.x, threadIdx.x, bbox_flag[i]);
-        }
     }
 }
 
 int main(int argc, char *argv[])
 {
 
-    // char filename[] = "../io/bunny_tri.raw";
     int ndivx(21), ndivy(21), ndivz(21); // number of grids in x, y, z direction
     float pm(0.01); // percentage of margin
-    char *filename;
-    char *filename_out;
+    char *filename; // variable to store input file name
+    char *filename_out; // variable to store output file name
     bool flag_cpu, flag_gpu; // switch of cpu and gpu code
 
     int nvert, nface;
@@ -194,10 +189,7 @@ int main(int argc, char *argv[])
             string input_str = result["i"].as<string>();
             filename = (char *)alloca(input_str.size() + 1);
             memcpy(filename, input_str.c_str(), input_str.size() + 1);
-        }
 
-        //if (result.count("o"))
-        {
             // Set output file name
             string output_str = result["o"].as<string>();
             filename_out = (char *)alloca(output_str.size() + 1);
@@ -220,9 +212,9 @@ int main(int argc, char *argv[])
     
     printf("Reading Geometry\n");
     Meshio Mesh_host;
-    Mesh_host.read_raw_file(filename, vertex_host, face_host);
-    Mesh_host.set_bounding_box(ndivx, ndivy, ndivz);
-    Mesh_host.calculate_grid(origin_host);
+    Mesh_host.read_raw_file(filename, vertex_host, face_host); // Read input triangle mesh
+    Mesh_host.set_bounding_box(ndivx, ndivy, ndivz, pm); // Set up bounding box 
+    Mesh_host.calculate_grid(origin_host); // Compute the coordinates of all grid points
     printf("minimum x, y, z = %f, %f, %f\n", Mesh_host.x_min, Mesh_host.y_min, Mesh_host.z_min);
     printf("maximum x, y, z = %f, %f, %f\n", Mesh_host.x_max, Mesh_host.y_max, Mesh_host.z_max);
 
@@ -230,9 +222,9 @@ int main(int argc, char *argv[])
     {
         printf("----------Starting CPU Code----------\n");
         begin = clock();
-        Mesh_host.calculate_normal();
+        Mesh_host.calculate_normal(); // Computing normal vector for each element on CPU
         printf("Ray Tracing on CPU\n");
-        Mesh_host.point_membership();
+        Mesh_host.point_membership(); // Raytracing on CPU
         end = clock();
         elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
         printf("CPU computing time: %f seconds\n", elapsed_secs);
@@ -249,6 +241,7 @@ int main(int argc, char *argv[])
         nface = face_host.size();
         int thread_per_block = 10;
     
+        // Allocate memory on GPU and transfer mesh information to GPU
         printf("Sending Mesh to GPU\n");
         Meshio *Mesh_dev = NULL;
         vertex3D *vertex_dev = NULL;
@@ -277,14 +270,16 @@ int main(int argc, char *argv[])
         }
     
         begin = clock();
-        // printf("Computing normal vector for each element on GPU\n");
+        // Computing normal vector for each element on GPU
         calculate_normal<<<(nface + thread_per_block - 1) / thread_per_block, thread_per_block>>>(vertex_dev, face_dev, nface);
         cudaDeviceSynchronize();
     
+        // Allocate memory to store result on GPU
         int *bbox_flag_dev = NULL;
         cudaStatus = cudaMalloc((void **)&bbox_flag_dev, ngrid * sizeof(int));
         cudaDeviceSynchronize();
     
+        // Raytracing on GPU
         printf("Ray tracing on GPU\n");
         point_membership<<<(ngrid + thread_per_block - 1) / thread_per_block, thread_per_block>>>(Mesh_dev, origin_dev, vertex_dev, face_dev, bbox_flag_dev);
         cudaDeviceSynchronize();
@@ -293,16 +288,12 @@ int main(int argc, char *argv[])
         elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
         printf("GPU computing time: %f seconds\n", elapsed_secs);
     
+        // Transfer raytracing result from GPU to CPU
         int bbox_flag_host[ngrid]; /// Use this variable to output the result
         cudaMemcpy((void *)bbox_flag_host, (void *)bbox_flag_dev, ngrid * sizeof(int), cudaMemcpyDeviceToHost);
     
+        // Generate vtk result
         Mesh_host.display_result(filename_out, bbox_flag_host);
-    
-        // for(int ii = 0; ii<ngrid;ii++)
-        // {
-        //     if(bbox_flag_host[ii]==1)
-        //         printf("GridIndex:%d, %d\n",ii,bbox_flag_host[ii]);
-        // }
     
         cudaFree(Mesh_dev);
         cudaFree(vertex_dev);

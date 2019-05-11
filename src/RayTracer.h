@@ -21,7 +21,7 @@ public:
 	vector<tri> face;
 	vector<int> bbox_flag;
 	void read_raw_file(const char * fn, vector<vertex3D> &vertex_out, vector<tri> &face_out);
-	void set_bounding_box(int nx, int ny, int nz);
+	void set_bounding_box(int nx, int ny, int nz, float pm);
 	void calculate_grid(vector<vertex3D> &origin_out);
 	void calculate_normal();
 	void point_membership();
