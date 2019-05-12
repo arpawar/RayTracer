@@ -181,6 +181,7 @@ int main(int argc, char *argv[])
     char *filename_out; // variable to store output file name
     bool flag_cpu, flag_gpu; // switch of cpu and gpu code
 
+    int nvert, nface;
     vector<vertex3D> vertex_host, origin_host;
     vector<tri> face_host;
 
