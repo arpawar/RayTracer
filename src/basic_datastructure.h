@@ -24,7 +24,8 @@ and the normal vector n to the face.
 #include <fstream>
 #include <iostream>
 
-
+// Struct variable defining vertex in 3D space
+// vertex3D variable consists of x,y and z component
 class vertex3D
 {
 public:
