@@ -20,41 +20,52 @@ else the number of intersections are even.
 
 using namespace std;
 
+//this function calculates the normals of the surface mesh
 __global__ void calculate_normal(vertex3D *vertex, tri *face, int nface)
 {
     int i = blockDim.x * blockIdx.x + threadIdx.x;
     if (i < nface)
     {
+        // indices of the vertices of the face
         int v0_ind = face[i].v[0];
         int v1_ind = face[i].v[1];
         int v2_ind = face[i].v[2];
 
+        //edge vectors initialized
         vertex3D e1, e2;
+        //normal vector initialized
         vertex3D nn;
 
+        //set the first edge vector e1 = v1 - v0
         e1.x = vertex[v1_ind].x - vertex[v0_ind].x;
         e1.y = vertex[v1_ind].y - vertex[v0_ind].y;
         e1.z = vertex[v1_ind].z - vertex[v0_ind].z;
 
+        //set the second edge vector e2 = v2 - v0
         e2.x = vertex[v2_ind].x - vertex[v0_ind].x;
         e2.y = vertex[v2_ind].y - vertex[v0_ind].y;
         e2.z = vertex[v2_ind].z - vertex[v0_ind].z;
 
+        //compute normal vector as cross product of e1 and e2: n = cross(e1,e2)
         nn.x = e1.y * e2.z - e1.z * e2.y;
         nn.y = e1.z * e2.x - e1.x * e2.z;
         nn.z = e1.x * e2.y - e1.y * e2.x;
 
+        //find the magnitude of the normal vector
         float n_norm = sqrt(pow(nn.x, 2) + pow(nn.y, 2) + pow(nn.z, 2));
+        //normalize the normal vector and store it in the face object
         face[i].n.x = nn.x / n_norm;
         face[i].n.y = nn.y / n_norm;
         face[i].n.z = nn.z / n_norm;
     }
 }
 
+// this function performs ray tracing and assign point membership to each grid point
 __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3D *vertex, tri *face, int *bbox_flag)
 {
     int ngrid = Mesh_dev->ngrid;
     int nface = Mesh_dev->nface;
+    //initialize flag (inside/outside) variable
     int f1;
 
     int i = blockDim.x * blockIdx.x + threadIdx.x;
@@ -65,24 +76,38 @@ __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3
         origin.x = origin_dev[i].x;
         origin.y = origin_dev[i].y;
         origin.z = origin_dev[i].z;
+        //set ray direction along x-axis i.e. (1,0,0)
         ray.x = 1;
         ray.y = 0;
         ray.z = 0;
+        //initialize no. of intersections of the ray with faces to 0
         int count = 0;
+        //loop over faces
         for (int iface = 0; iface < nface; iface++)
         {
+            //indices of vertices of the face
             int v0_ind = face[iface].v[0];
             int v1_ind = face[iface].v[1];
             int v2_ind = face[iface].v[2];
+            //normal vector of the face
             vertex3D nn = face[iface].n;
+            
+            //refer to https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
+			//for more details on the formulas and variables
+			//the ray vector is defines as p_vec = origin + t*ray
+			//here calculating the t parameter at which the ray intersects the face
             float D = -(nn.x * vertex[v0_ind].x + nn.y * vertex[v0_ind].y + nn.z * vertex[v0_ind].z);
             float t1 = -(nn.x * origin.x + nn.y * origin.y + nn.z * origin.z + D);
             float t2 = (nn.x * ray.x + nn.y * ray.y + nn.z * ray.z);
             float t = t1 / t2;
+            
+            //computing p_vec
             vertex3D p_vec;
             p_vec.x = origin.x + t * ray.x;
             p_vec.y = origin.y + t * ray.y;
             p_vec.z = origin.z + t * ray.z;
+            
+            //calculating edge vectors e0 = v1-v0, e1 = v2-v1 and e2 = v0-v2
             vertex3D e0, e1, e2, c0, c1, c2;
             e0.x = vertex[v1_ind].x - vertex[v0_ind].x;
             e0.y = vertex[v1_ind].y - vertex[v0_ind].y;
@@ -93,6 +118,8 @@ __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3
             e2.x = vertex[v0_ind].x - vertex[v2_ind].x;
             e2.y = vertex[v0_ind].y - vertex[v2_ind].y;
             e2.z = vertex[v0_ind].z - vertex[v2_ind].z;
+            
+            // calculating c0 = p_vec-v0, c1 = p_vec-v1, c2 = p_vec-v2
             c0.x = p_vec.x - vertex[v0_ind].x;
             c0.y = p_vec.y - vertex[v0_ind].y;
             c0.z = p_vec.z - vertex[v0_ind].z;
@@ -102,6 +129,8 @@ __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3
             c2.x = p_vec.x - vertex[v2_ind].x;
             c2.y = p_vec.y - vertex[v2_ind].y;
             c2.z = p_vec.z - vertex[v2_ind].z;
+            
+            //calculating e0c0 = cross(e0,c0), e1c1 = cross(e1,c1), e2c2 = cross(e2,c2)
             vertex3D e0c0, e1c1, e2c2;
             e0c0.x = e0.y * c0.z - e0.z * c0.y;
             e0c0.y = e0.z * c0.x - e0.x * c0.z;
@@ -113,23 +142,30 @@ __global__ void point_membership(Meshio *Mesh_dev, vertex3D *origin_dev, vertex3
             e2c2.y = e2.z * c2.x - e2.x * c2.z;
             e2c2.z = e2.x * c2.y - e2.y * c2.x;
 
+            //calculating case1 = dot(n,e0c0), case2 = dot(n,e1c1), case3 = dot(n,e2c2)
             float case1, case2, case3;
             case1 = nn.x * e0c0.x + nn.y * e0c0.y + nn.z * e0c0.z;
             case2 = nn.x * e1c1.x + nn.y * e1c1.y + nn.z * e1c1.z;
             case3 = nn.x * e2c2.x + nn.y * e2c2.y + nn.z * e2c2.z;
+            
+            //increment counter if p_vec is inside the triangle face
             if (case1 > 0 && case2 > 0 && case3 > 0 && t > 0)
             {
                 count++;
             }
         }
 
+        //if count is even->grid point is outside the geometry
         if (count % 2 == 0)
         {
+            //set flag as 0
             f1 = 0;
             bbox_flag[i] = (f1);
         }
+        //if count is odd->grid point is inside the geometry
         else
         {
+            //set flag as 1
             f1 = 1;
             bbox_flag[i] = (f1);
         }
@@ -218,6 +254,8 @@ int main(int argc, char *argv[])
     
     printf("Reading Geometry\n");
     Meshio Mesh_host;
+    if(Mesh_host.flag==1)
+    {
     Mesh_host.read_raw_file(filename, vertex_host, face_host); // Read input triangle mesh
     Mesh_host.set_bounding_box(ndivx, ndivy, ndivz, pm); // Set up bounding box 
     Mesh_host.calculate_grid(origin_host); // Compute the coordinates of all grid points
@@ -304,7 +342,12 @@ int main(int argc, char *argv[])
         cudaFree(origin_dev);
         cudaFree(face_dev);
     }
+    }
     
+    else
+    {
+        printf("Error creating Mesh object\n");
+    }
 
     return 0;
 }
