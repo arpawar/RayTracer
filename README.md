@@ -26,7 +26,7 @@ For the algorithm used for testing the location of grid point, please refer to [
     
     * CPU: Intel(R) Core(TM) i7 CPU 960  @ 3.20GHz
     
-    * GPU：Nvidia GeForce GTX 1080 Ti 
+    * GPU: Nvidia GeForce GTX 1080 Ti 
     
 * **To check help information:**
 
