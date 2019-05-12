@@ -1,0 +1,42 @@
+Variables in the Ray Tracer 
+
+struct variable Mesh variables:
+flag: flag to define successfully creating the mesh object
+nvert: number of vertices in the mesh 
+nface: number of faces in the mesh
+ngrid: number of grid points in the structured grid
+x_min, x_max, y_min, y_max, z_min, z_max: the minimum and maximum values of the 3D structured grid in x, y and z direction
+ndivx, ndivy, ndivz: number of grid points in x, y and z direction respectively
+vertex: vertex coordinates of the mesh
+face: face object stores the vertex indices and the normal vectors associated with each face in mesh
+  1. v[3]: stores the vetex indices
+  2. n: stores the normal vector
+bbox_flag:  this variable denotes whether each grid point is inside or outside the geometry
+
+v0_ind: index of first vetex in each face
+v1_ind: index of second vertex in each face
+v2_ind: index of third vertex in each face
+e1: edge vector in each face for normal vector computation (e0 = v1-v0)
+e2: edge vector in each face for normal vector computation (e1 = v2-v0)
+origin: stores the grid point coordinates
+ray: stores the direction of the ray
+D: distance of the origin to each face
+t: parameter at which the ray intersects the face (line equation of the ray: p_vec = origin + t*ray)
+p_vec: point where the ray intersects the plane containing each face
+c0: vector computing p_vec-v0
+c1: vector computing p_vec-v1
+c2: vector computing p_vec-v2
+e0c0, e1c1, e2c2: vector computing e0c0 = cross(e0,c0), e1c1 = cross(e1,c1), e2c2 = cross(e2,c2)
+case1, case2, case3: values computing case1 = dot(n,e0c0), case2 = dot(n,e1c1), case3 = dot(n,e2c2)
+count: counter of number of faces intersecting with each ray
+filename: filename of input mesh
+filename_out: filename of output vtk file
+
+
+Command Line parameters:
+pm: percentage of margin for the boundary of bounding box
+ndivx: number of grids in x direction
+ndivy: number of grids in y direction
+ndivz: number of grids in z direction
+flag_cpu: set switch of cpu code
+flag_gpu: set switch of gpu code
