@@ -74,4 +74,4 @@ References:
    
   
    
-   In `./io` folder, we provide the example input mesh file of bunny geometry.
+   In `./io` folder, we provide example input mesh files for five different geometries, namely, bunny, eight, kitten, rod and sculpture. The corresponding result for each model is also provided, the grid resolution used here is 101 * 101 * 101.
