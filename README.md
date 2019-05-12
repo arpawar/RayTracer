@@ -46,6 +46,10 @@ For the algorithm used for testing the location of grid point, please refer to [
 
    * Run `>> ./kernel` will generate the result for embedding the bunny geometry in a 21 * 21 * 21 grid using pure GPU code.
    
-   * Run `>> ./kernel --cpu` to compare the computation time of CPU and GPU.
+   * Run `>> ./kernel -i ../io/bunny_tri.raw -o ../io/result.vtk --nx 101 --ny 101 --nz 101 --pm 0.01` will generate the result for embedding the bunny geometry in a 101 * 101 * 101 grid using pure GPU code.
+   
+   * Run `>> ./kernel --cpu` to compare the computation time of CPU and GPU using bunny geometry.
+   
+  
    
    In `./io` folder, we provide the example input mesh file of bunny geometry.
