@@ -5,6 +5,10 @@ For the algorithm used for testing the location of grid point, please refer to [
 
 The command line parser used in this project: [Lightweight C++ command line option parser](https://github.com/jarro2783/cxxopts)
 
+References:
+[1] Hsu, M. C., Wang, C., Xu, F., Herrema, A. J., & Krishnamurthy, A. (2016). Direct immersogeometric fluid flow analysis using B-rep CAD models. Computer Aided Geometric Design, 43, 143-158.
+[2] Towns, J., Cockerill, T., Dahan, M., Foster, I., Gaither, K., Grimshaw, A., ... & Roskies, R. (2014). XSEDE: accelerating scientific discovery. Computing in Science & Engineering, 16(5), 62-74.
+
 ## Dependencies
 * [CUDA Toolkits 9.1](https://developer.nvidia.com/accelerated-computing-toolkit)
 
