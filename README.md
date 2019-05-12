@@ -28,6 +28,12 @@ For the algorithm used for testing the location of grid point, please refer to [
     
     * GPU: Nvidia GeForce GTX 1080 Ti 
     
+    We also ran the code on Pittsburgh Supercomputing Center with the machine specificaiton as follows:
+    
+    * CPU: Intel Xeon E5-2683 v4
+    
+    * GPU: NVIDIA Tesla P100
+    
 * **To check help information:**
 
    ` >> ./kernel -h` 
