@@ -3,6 +3,8 @@ The project objective is to embed a geometry in 3D structured grid and perform t
 
 For the algorithm used for testing the location of grid point, please refer to [Ray-Triangle Intersection](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution).
 
+The command line parser used in this project: [Lightweight C++ command line option parser](https://github.com/jarro2783/cxxopts)
+
 ## Dependencies
 * [CUDA Toolkits 9.1](https://developer.nvidia.com/accelerated-computing-toolkit)
 
