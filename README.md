@@ -20,6 +20,14 @@ For the algorithm used for testing the location of grid point, please refer to [
 
     In `./src` folder, run ` >> make` will compile the code to excutable file `kernel`
     
+    The code has been compiled and tested on Ubuntu 16.04 with GCC 5.4.0 and CUDA 9.1. 
+    
+    The code was run on CMU qwe cluster with the machine specification: 
+    
+    * CPU: Intel(R) Core(TM) i7 CPU 960  @ 3.20GHz
+    
+    * GPU： Nvidia GeForce GTX 1080 Ti 
+    
 * **To check help information:**
 
    ` >> ./kernel -h` 
