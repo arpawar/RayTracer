@@ -90,9 +90,9 @@ void Meshio::set_bounding_box(int nx, int ny, int nz, float pm)
 	x_min = floor(xmin - pm*(xmax-xmin));
 	y_min = floor(ymin - pm*(ymax-ymin));
 	z_min = floor(zmin - pm*(zmax-zmin));
-	x_max = floor(xmax + pm*(xmax-xmin));
-	y_max = floor(ymax + pm*(ymax-ymin));
-	z_max = floor(zmax + pm*(zmax-zmin));
+	x_max = ceil(xmax + pm*(xmax-xmin));
+	y_max = ceil(ymax + pm*(ymax-ymin));
+	z_max = ceil(zmax + pm*(zmax-zmin));
 
 	ndivx = nx;
 	ndivy = ny;
