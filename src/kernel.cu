@@ -1,3 +1,11 @@
+/* This code performs point membership of 3D structured grid points that
+embed the geometry. For the 3D structured grid we perform test to check which
+grid points lie inside/outside the geometry. For each point in the grid a ray
+starts from the grid point and in the x-direction to check for intersection
+with the geometry. If the points are inside, the number of intersections are odd,
+else the number of intersections are even.
+*/
+
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -137,10 +145,8 @@ int main(int argc, char *argv[])
     char *filename_out; // variable to store output file name
     bool flag_cpu, flag_gpu; // switch of cpu and gpu code
 
-    int nvert, nface;
     vector<vertex3D> vertex_host, origin_host;
     vector<tri> face_host;
-
 
     // Parse command line, set parameters and I/O
     try
@@ -215,9 +221,7 @@ int main(int argc, char *argv[])
     Mesh_host.read_raw_file(filename, vertex_host, face_host); // Read input triangle mesh
     Mesh_host.set_bounding_box(ndivx, ndivy, ndivz, pm); // Set up bounding box 
     Mesh_host.calculate_grid(origin_host); // Compute the coordinates of all grid points
-    printf("minimum x, y, z = %f, %f, %f\n", Mesh_host.x_min, Mesh_host.y_min, Mesh_host.z_min);
-    printf("maximum x, y, z = %f, %f, %f\n", Mesh_host.x_max, Mesh_host.y_max, Mesh_host.z_max);
-
+    
     if(flag_cpu)
     {
         printf("----------Starting CPU Code----------\n");
