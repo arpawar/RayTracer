@@ -271,14 +271,14 @@ void Meshio::point_membership()
 					case2 = nn.x * e1c1.x + nn.y * e1c1.y + nn.z * e1c1.z;
 					case3 = nn.x * e2c2.x + nn.y * e2c2.y + nn.z * e2c2.z;
 
-					//increment counter if point is inside the triangle face
+					//increment counter if p_vec is inside the triangle face
 					if (case1 > 0 && case2 > 0 && case3 > 0 && t > 0)
 					{
 						count++;
 					}
 				}
 				
-				//if count is even->point is outside
+				//if count is even-> grid point is outside the geometry
 				int e = k * ndivy * ndivx + j * ndivx + i;
 				if (count % 2 == 0)
 				{
@@ -287,7 +287,7 @@ void Meshio::point_membership()
 					bbox_flag[e] = (f1);
 				}
 				
-				//point in inside
+				//grid point in inside the geometry
 				else
 				{
 					//set flag as 1
