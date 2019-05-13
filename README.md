@@ -5,7 +5,7 @@ For the algorithm used for carrying out the point membership classification of e
 
 The command line parser used in this project: [Lightweight C++ command line option parser](https://github.com/jarro2783/cxxopts)
 
-This project includes implementation of the ray tracing algorithm for triangulated surface geometry. Users can possibly extend the algorithm for quadrilateral meshes and CAD models. 
+This project includes implementation of the ray tracing algorithm for triangulated surface geometry. Users can extend the algorithm for quadrilateral meshes and CAD models. 
 
 References:
 
