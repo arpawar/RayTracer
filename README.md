@@ -97,7 +97,7 @@ References:
        * `>> CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'secretpassword';`
        * `>> GRANT ALL PRIVILEGES ON *.* TO ' webuser'@'localhost';`
      * Create database `>> CREATE DATABASE Ray_Tracing;` and exit;
-     * Type: `>>mysql -u webuser -p Ray_Tracing < /Users/yuyuxuan/Sites/Website/Ray_Tracing.sql in the terminal`.
+     * Type: `>> mysql -u webuser -p Ray_Tracing < /Users/yuyuxuan/Sites/Website/Ray_Tracing.sql` in the terminal.
      * (Optional) if we had problem **Warning: mysqli_connect():** in browser, we need to change the mysql password type, in mysql: `>> ALTER USER 'webuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secretpassword';`
 
 * **Permissions needed for the code files:**
