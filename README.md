@@ -11,7 +11,7 @@ References:
 
 [2] Towns, J., Cockerill, T., Dahan, M., Foster, I., Gaither, K., Grimshaw, A., ... & Roskies, R. (2014). XSEDE: accelerating scientific discovery. Computing in Science & Engineering, 16(5), 62-74.
 
-[3]  Klein, Fritz. "A new approach to point membership classification in B-rep solids." IMA International Conference on Mathematics of Surfaces. Springer, Berlin, Heidelberg, 2009style="font-weight:bold" .
+[3]  Klein, F., A new approach to point membership classification in B-rep solids. IMA International Conference on Mathematics of Surfaces. Springer, Berlin, Heidelberg, 2009style="font-weight:bold" .
 
 [4]  Wikipedia contributors. "Graphics processing unit." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 19 Apr. 2019. Web. 7 May. 2019.
 
