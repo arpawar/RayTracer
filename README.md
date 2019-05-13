@@ -7,17 +7,17 @@ The command line parser used in this project: [Lightweight C++ command line opti
 
 References:
 
-[1] Hsu, M. C., Wang, C., Xu, F., Herrema, A. J., & Krishnamurthy, A. (2016). Direct immersogeometric fluid flow analysis using B-rep CAD models. Computer Aided Geometric Design, 43, 143-158.
+[1] Hsu, M. C., Wang, C., Xu, F., Herrema, A. J., & Krishnamurthy, A. Direct immersogeometric fluid flow analysis using B-rep CAD models. Computer Aided Geometric Design, 43, 143-158, 2016.
 
-[2] Towns, J., Cockerill, T., Dahan, M., Foster, I., Gaither, K., Grimshaw, A., ... & Roskies, R. (2014). XSEDE: accelerating scientific discovery. Computing in Science & Engineering, 16(5), 62-74.
+[2] Towns, J., Cockerill, T., Dahan, M., Foster, I., Gaither, K., Grimshaw, A., ... & Roskies, R., XSEDE: accelerating scientific discovery. Computing in Science & Engineering, 16(5), 62-74, 2014.
 
-[3]  Klein, F., A new approach to point membership classification in B-rep solids. IMA International Conference on Mathematics of Surfaces. Springer, Berlin, Heidelberg, 2009style="font-weight:bold" .
+[3]  Klein, F., A new approach to point membership classification in B-rep solids. IMA International Conference on Mathematics of Surfaces. Springer, Berlin, Heidelberg, 2009.
 
 [4]  Wikipedia contributors. "Graphics processing unit." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 19 Apr. 2019. Web. 7 May. 2019.
 
 [5]  Wikipedia contributors. "Ray tracing (graphics)." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 7 May. 2019. Web. 7 May. 2019.
 
-[6] Requicha, Ari. "Geometric modeling: A first course." (1996).
+[6] Requicha, Ari. Geometric modeling: A first course. (1996).
 
 ## Dependencies
 * [CUDA Toolkits 9.1](https://developer.nvidia.com/accelerated-computing-toolkit)
