@@ -1,23 +1,23 @@
 # RayTracer - GPU Framework for Point Membership Classification of Geometric Models
-The project objective is to embed a geometry in 3D structured grid and perform tests to check which grid points lie inside/outside the geometry. GPU framework is designed to deal with the large computation cost of this evaluation process. This algorithm has application while working in the field of immersed boundary analysis methods.
+The project objective is to embed a geometry in 3D structured grid and perform tests to check which grid points lie inside/outside the geometry. GPU framework is designed to deal with the large computation cost of this evaluation process. This algorithm has applications while working in the field of immersed boundary analysis methods.
 
-For the algorithm used for testing the location of grid point, please refer to [Ray-Triangle Intersection](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution).
+For the algorithm used for carrying out the point membership classification of each grid point, please refer to [Ray-Triangle Intersection](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution).
 
 The command line parser used in this project: [Lightweight C++ command line option parser](https://github.com/jarro2783/cxxopts)
 
 References:
 
-[1] Hsu, M. C., Wang, C., Xu, F., Herrema, A. J., & Krishnamurthy, A. (2016). Direct immersogeometric fluid flow analysis using B-rep CAD models. Computer Aided Geometric Design, 43, 143-158.
+[1] Hsu, M. C., Wang, C., Xu, F., Herrema, A. J., & Krishnamurthy, A. Direct immersogeometric fluid flow analysis using B-rep CAD models. Computer Aided Geometric Design, 43, 143-158, 2016.
 
-[2] Towns, J., Cockerill, T., Dahan, M., Foster, I., Gaither, K., Grimshaw, A., ... & Roskies, R. (2014). XSEDE: accelerating scientific discovery. Computing in Science & Engineering, 16(5), 62-74.
+[2] Towns, J., Cockerill, T., Dahan, M., Foster, I., Gaither, K., Grimshaw, A., ... & Roskies, R., XSEDE: accelerating scientific discovery. Computing in Science & Engineering, 16(5), 62-74, 2014.
 
-[3]  Klein, Fritz. "A new approach to point membership classification in B-rep solids." IMA International Conference on Mathematics of Surfaces. Springer, Berlin, Heidelberg, 2009style="font-weight:bold" .
+[3]  Klein, F., A new approach to point membership classification in B-rep solids. IMA International Conference on Mathematics of Surfaces. Springer, Berlin, Heidelberg, 2009.
 
 [4]  Wikipedia contributors. "Graphics processing unit." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 19 Apr. 2019. Web. 7 May. 2019.
 
 [5]  Wikipedia contributors. "Ray tracing (graphics)." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 7 May. 2019. Web. 7 May. 2019.
 
-[6] Requicha, Ari. "Geometric modeling: A first course." (1996).
+[6] Requicha, Ari. Geometric modeling: A first course. (1996).
 
 ## Dependencies
 * [CUDA Toolkits 9.1](https://developer.nvidia.com/accelerated-computing-toolkit)
@@ -44,7 +44,7 @@ References:
 
     * GPU: Nvidia GeForce GTX 1080 Ti
 
-    We also ran the code on Pittsburgh Supercomputing Center with the machine specificaiton as follows:
+    We also ran the code on Pittsburgh Supercomputing Center with the machine specification as follows:
 
     * CPU: Intel Xeon E5-2683 v4
 
