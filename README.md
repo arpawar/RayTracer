@@ -91,7 +91,7 @@ References:
      * First move to the folder where you ask the browser look at (default location). In my computer, it is in **~/Sites/**.
      * Use `>> unzip Website.zip` to extract code.
 * **Recover the mysql database:**
-     * Based on the file **db_credentials.php” in **private folder**, we know username of database is **webuser**, password of database is **secretpassword**.
+     * Based on the file **db_credentials.php** in **private folder**, we know username of database is **webuser**, password of database is **secretpassword**.
      * Create user, the following is done in root user. Give Privilege
        `>> mysql -u root -p`
        `>> CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'secretpassword';`
