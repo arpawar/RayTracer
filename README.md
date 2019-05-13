@@ -44,7 +44,7 @@ References:
 
     * GPU: Nvidia GeForce GTX 1080 Ti
 
-    We also ran the code on Pittsburgh Supercomputing Center with the machine specificaiton as follows:
+    We also ran the code on Pittsburgh Supercomputing Center with the machine specification as follows:
 
     * CPU: Intel Xeon E5-2683 v4
 
