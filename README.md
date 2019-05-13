@@ -88,17 +88,17 @@ References:
 ## Website User Guide
 
 * **Extract the code from the archive:**
-     * First move to the folder where you ask the browser look at (default location). In my computer, it is in “~/Sites/”.
-     * Use “unzip Website.zip” to extract code.
+     * First move to the folder where you ask the browser look at (default location). In my computer, it is in **~/Sites/**.
+     * Use `>> unzip Website.zip` to extract code.
 * **Recover the mysql database:**
-     * Based on the file “db_credentials.php” in “private folder”, we know username of database is “webuser”, password of database is “secretpassword”.
+     * Based on the file **db_credentials.php” in **private folder**, we know username of database is **webuser**, password of database is **secretpassword**.
      * Create user, the following is done in root user. Give Privilege
-     *     a. mysql -u root -p
-     *     b. CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'secretpassword';
-     *     c. GRANT ALL PRIVILEGES ON *.* TO ' webuser'@'localhost';
-     * Create database “CREATE DATABASE ;” and exit;
-     * Type: mysql -u webuser -p Ray_Tracing < /Users/yuyuxuan/Sites/Website/Ray_Tracing.sql in the terminal.
-     * (Optional) if we had problem “Warning: mysqli_connect():” in browser, we need to change the mysql password type, in mysql: “ALTER USER 'webuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secretpassword';”
+       `>> mysql -u root -p`
+       `>> CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'secretpassword';`
+       `>> GRANT ALL PRIVILEGES ON *.* TO ' webuser'@'localhost';`
+     * Create database `>> CREATE DATABASE Ray_Tracing;` and exit;
+     * Type: `>>mysql -u webuser -p Ray_Tracing < /Users/yuyuxuan/Sites/Website/Ray_Tracing.sql in the terminal`.
+     * (Optional) if we had problem **Warning: mysqli_connect():** in browser, we need to change the mysql password type, in mysql: `>> ALTER USER 'webuser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secretpassword';`
 
 * **Permissions needed for the code files:**
 
