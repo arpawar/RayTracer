@@ -1,7 +1,7 @@
 # RayTracer - GPU Framework for Point Membership Classification of Geometric Models
-The project objective is to embed a geometry in 3D structured grid and perform tests to check which grid points lie inside/outside the geometry. GPU framework is designed to deal with the large computation cost of this evaluation process. This algorithm has application while working in the field of immersed boundary analysis methods.
+The project objective is to embed a geometry in 3D structured grid and perform tests to check which grid points lie inside/outside the geometry. GPU framework is designed to deal with the large computation cost of this evaluation process. This algorithm has applications while working in the field of immersed boundary analysis methods.
 
-For the algorithm used for testing the location of grid point, please refer to [Ray-Triangle Intersection](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution).
+For the algorithm used for carrying out the point memebership classification of each grid point, please refer to [Ray-Triangle Intersection](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution).
 
 The command line parser used in this project: [Lightweight C++ command line option parser](https://github.com/jarro2783/cxxopts)
 
